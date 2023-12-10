@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://grsjgmjeton2"]
+
+[ext_resource type="Script" path="res://addons/music-box/music_box.gd" id="1_0j3mb"]
+
+[node name="music_box" type="AudioStreamPlayer"]
+process_mode = 3
+script = ExtResource("1_0j3mb")
