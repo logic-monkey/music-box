@@ -4,4 +4,5 @@
 
 [node name="music_box" type="AudioStreamPlayer"]
 process_mode = 3
+bus = &"music box"
 script = ExtResource("1_0j3mb")
