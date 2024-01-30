@@ -24,12 +24,15 @@ func LoadSong(song: String):
 	return
 	
 signal faded_out
+var fade_volume_zero = false
 func FadeMusicOut(time := 0.25):
 	var tween = get_tree().create_tween()
 	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	tween.tween_method(SetFadeVolume, 1.0, 0.0, time)\
 			.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
 	await tween.finished
+	stop()
+	fade_volume_zero = true
 	emit_signal("faded_out")
 
 func SetFadeVolume(v:float):
@@ -38,12 +41,24 @@ func SetFadeVolume(v:float):
 		
 func SwitchToSong(song, fade_time:float=0.0):
 	if song is String:
-		if stream and song == stream.resource_path: return
+		if stream and song == stream.resource_path: 
+			if fade_volume_zero:
+				SetFadeVolume(1)
+				fade_volume_zero = false
+			if not playing:
+				play()
+			return
 		LoadSong(song)
 		await song_loaded
 		if not buffer: return
 	elif song is AudioStream:
-		if song == stream: return
+		if song == stream: 
+			if fade_volume_zero:
+				SetFadeVolume(1)
+				fade_volume_zero = false
+			if not playing:
+				play()
+			return
 		buffer = song
 	else:
 		print("_MUSIC.SwitchToSong failed; song is not a path to a song or audiostream")
@@ -56,5 +71,6 @@ func SwitchToSong(song, fade_time:float=0.0):
 		await faded_out
 	stop()
 	SetFadeVolume(1)
+	fade_volume_zero = false
 	stream = buffer
 	play()
