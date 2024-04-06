@@ -40,6 +40,9 @@ func SetFadeVolume(v:float):
 		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("music box"), linear_to_db(v))
 		
 func SwitchToSong(song, fade_time:float=0.0):
+	if not _INIT.is_loaded:
+		await  _INIT.loaded
+		await get_tree().create_timer(1)
 	if song is String:
 		if stream and song == stream.resource_path: 
 			if fade_volume_zero:
