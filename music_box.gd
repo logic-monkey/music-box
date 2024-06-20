@@ -10,7 +10,7 @@ func LoadSong(song: String):
 		print ("Failed to load %s; does not exist" % song)
 		emit_signal("song_loaded")
 		return
-	ResourceLoader.load_threaded_request(song, "AudioStreme")
+	ResourceLoader.load_threaded_request(song, "AudioStream")
 	var tree = get_tree()
 	while ResourceLoader.load_threaded_get_status(song) == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
 		await tree.process_frame
